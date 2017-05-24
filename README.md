@@ -15,9 +15,7 @@ Some ready list are in data folder.
 3. Run junction discovery script
 ```qsub ~/tools/MendelianRNA-seq/Analysis/rnaseq.splice_junction_discovery.pbs -v gene_list=kidney.glomerular.genes.list,bam_list=bam.list```
 
-4. Filter junction covered with >10 reads and found in 1 sample.
-```cat All.kidney.glomerular.genes.list.splicing.txt | awk '{if (($6>10) && ($7==1)) print $0}' > novel_junctions.txt```
+4. Run novel junction discovery script
+```input=/path/to/All.kidney.glomerrlar.genes.list.splicing.txt sample=sampleName /MendelianRNA-seq/Analysis/NormalizeAndDiscoverNovelSpliceJunctions.sh```
 
-5. Add normalized read count values to the file produced from step 3.
-```qsub ~/tools/MendelianRNA-seq/Analysis/rnaseq.normalize_splice_junction_values.pbs -v splice_file=All.kidney.glomerular.genes.list.splicing.txt,transcript_model=gencode.comprehensive.splice.junctions.txt,action=--normalize,$outputFileName=output.txt```
-
+Additional parameters can be specified. Read the .sh file.
