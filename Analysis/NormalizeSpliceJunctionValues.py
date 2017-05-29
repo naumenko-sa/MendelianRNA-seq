@@ -19,14 +19,14 @@ def make_annotated_junction_set(f,chrom_col,start_col,stop_col):
 			chrom = chrom.strip("chr")
 			start_flanks = get_flank(start)
 			stop_flanks = get_flank(stop)
-			st = tuple(("%s:%s-%s"%(chrom,start_flanks[ind],stop_flanks[ind])) for ind in range(0,3))			#range(0,3) shifts the junction while maintaining the same distance between start and stop
-			stadd1 = "%s:%s-%s"%(chrom,start_flanks[0],stop_flanks[2])				#start = originalStart - 2, stop = originalStop
-			stadd2 = "%s:%s-%s"%(chrom,start_flanks[2],stop_flanks[0])				#start = originalStart, stop = originalStop - 2
-			s.update(st,stadd1,stadd2)												#s contains (start-2,stop-2), (start-1,stop-1), (start,stop), (start-2,stop), (start,stop-2)
+			st = tuple(("%s:%s-%s"%(chrom,start_flanks[ind],stop_flanks[ind])) for ind in range(0,3))	#range(0,3) shifts the junction while maintaining the same distance between start and stop
+			stadd1 = "%s:%s-%s"%(chrom,start_flanks[0],stop_flanks[2])	#next 3 lines are just there to generate combinations using the flanking region of start and stop
+			stadd2 = "%s:%s-%s"%(chrom,start_flanks[2],stop_flanks[0])				
+			s.update(st,stadd1,stadd2)												
 	return s
 
 def get_flank(pos):
-	pos = int(pos)-1 		#always -1? why not omit this line and just return [pos-1,pos,pos+1] ?
+	pos = int(pos)-1 		#converts to 0 base
 	return [pos-1,pos,pos+1]
 
 #	this function is only here so that the program prints out ordered columns
@@ -169,7 +169,7 @@ def main(args):
 
 if __name__=="__main__":
 	parser = argparse.ArgumentParser(description = '''Get unannotated junctions from splice file''')
-	parser.add_argument('-transcript_model',help="Transcript model of canonical splicing, e.g. gencode v19. Default is ~/tools/MendelianRNA-seq/gencode.comprehensive.splice.junctions.txt",action='store',default = "~/tools/MendelianRNA-seq/gencode.comprehensive.splice.junctions.txt")
+	parser.add_argument('-transcript_model',help="Transcript model of canonical splicing, e.g. gencode v19. Default is set to /home/dennis.kao/tools/MendelianRNA-seq/gencode.comprehensive.splice.junctions.txt",action='store',default = "/home/dennis.kao/tools/MendelianRNA-seq/gencode.comprehensive.splice.junctions.txt")
 	parser.add_argument('-splice_file',help='Splice junction file to filter')
 	parser.add_argument('-gzipped', help='Add if sjout file is gzipped',action='store_true')
 	parser.add_argument('-chrom_col',help='Chromosome column',type=int,default=0)
